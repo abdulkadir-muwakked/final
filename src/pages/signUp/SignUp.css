@@ -1,0 +1,66 @@
+.SingUp{
+    display:flex;
+    flex-direction:column;
+       padding: 20px;
+       margin-top: 5px;
+   /* margin: 20px; */
+     align-items:right; 
+       gap:10px;
+   
+    align-self: center;
+    
+   
+   }
+   input:focus { 
+       border-color: #86b7fe;
+       box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
+       color: #212529;
+       outline: 0;
+   
+   }
+   .SingUp input{
+       padding: 10px;
+       border-radius: 0.375rem;
+       border-color: #F3F4F5;
+       border: 1px solid;
+      
+   }
+    
+   .box{
+       background: #fdfdfd;    
+       border: 1px solid #F3F4F5;
+       border-radius: 15px;
+       width:70vh ;
+    height:90%;
+    margin-right: 60%;
+   position: relative;
+   left:30%;
+   margin-top: 70px;
+   }
+   .reg{
+      background-color: #0d6efd;
+       width: 200px;
+       color: white;
+     
+   }
+   
+ 
+   .buttonss{
+       margin-top: 30px;
+       display: flex;
+       flex-direction: row;
+       justify-content:space-between;
+       
+       
+   }
+   .acc{
+       align-self: left;
+       padding-left: 30px;
+       margin: 3px;
+   }
+.logo {
+    font-size: 110px;
+    text-align: center;
+    justify-content: center;
+    color: #1d9bf0;
+  }

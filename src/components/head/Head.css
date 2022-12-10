@@ -1,0 +1,23 @@
+
+.link {
+    float: left;
+    color: rebeccapurple;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+   
+}
+.head{
+    overflow: hidden;
+     background-color: aliceblue;
+    height: 50px;
+    width: 100%;
+    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+     position: absolute;
+    z-index: -1;
+    margin-right: 300px;
+}

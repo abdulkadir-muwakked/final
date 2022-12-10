@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/home/Home";
+import BookMarks from "./pages/bookMarks/BookMarks";
+import Explore from "./pages/Explore 2/Explore";
+import Lists from "./pages/lists/Lists";
+import Profile from "./pages/profile/Profile";
+import SingIn from "./pages/signIn/SingIn";
+import SingOut from "./pages/signOut/SingOut";
+import SingUp from "./pages/signUp/SingUp";
+import RequiredAuth from "./RequiredAuth";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RequiredAuth />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/bookmarks" element={<BookMarks />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/lists" element={<Lists />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/singout" element={<SingOut />} />
+        </Route>
+
+        <Route path="/singin" element={<SingIn />} />
+        <Route path="/singup" element={<SingUp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
