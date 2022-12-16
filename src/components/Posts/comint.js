@@ -51,11 +51,12 @@ const Comments = ({tweet}) => {
             },
           });
           const json = await response.json();
-          if (json.success){
+          if (json.success) 
             console.log(json);
-            setComments(json.data.comments);
-          }
+            
+            setComments([...comments,...json.data.comments]);
           
+        
         };
         getcomments();
       }, []);

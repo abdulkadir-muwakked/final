@@ -37,7 +37,6 @@ const Profile = () => {
         Authorization: `Bearer ${token}`,
       },
 
-      // usePos =(...getMyProfile)
     });
     const deletNewPost = await ress.json();
     setPos(...getMyProfile);
@@ -45,7 +44,7 @@ const Profile = () => {
       const newtwet = [...post]
       const index = newtwet.findIndex(item => item.id == deletNewPost.data.id)
       newtwet[index] = deletNewPost.data
-      setPos(newtwet)
+      setPos([...pos ,...newtwet])
   }
   };
   // ///

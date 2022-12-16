@@ -53,7 +53,7 @@ const SingIn = () => {
               style={{
                 color: "#1d9bf0",
               }}
-              to="/singup"
+              to="/"
             >
               Register
             </Link>

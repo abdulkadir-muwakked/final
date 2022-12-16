@@ -6,12 +6,12 @@ import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { TfiComment } from "react-icons/tfi";
 import * as dayjs from "dayjs";
 import Comments from "./comint";
-import { json } from "react-router-dom";
+import Loader from "../loader/Loader";
 
 const Post = () => {
   let relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [tweets, setTweets] = useState([]);
   const [pageCounter, setPageCounter] = useState(1);
   const [pending, setPending] = useState(false);
@@ -51,22 +51,21 @@ const Post = () => {
 
   // ////////////////////
   const handleOnScroll = () => {
-    let userScrollH = 
-  document.documentElement.scrollTop 
-    
-    console.log(userScrollH, 'userScrollH');
+    let userScrollH = document.documentElement.scrollTop;
+
+    console.log(userScrollH, "userScrollH");
 
     let windowBottomHeight = document.documentElement.offsetHeight;
     console.log(pageCounter);
 
-    console.log(windowBottomHeight, 'windowBottomHeight');
+    console.log(windowBottomHeight, "windowBottomHeight");
 
-    if (userScrollH / 1.6 >= windowBottomHeight * pageCounter ) {
-      console.log('if firde', 11111);
-      
+    if (userScrollH / 1.6 >= windowBottomHeight * pageCounter) {
+      console.log("if firde", 11111);
+
       setPageCounter(pageCounter + 1);
     }
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", () => handleOnScroll());
@@ -74,31 +73,29 @@ const Post = () => {
       if (typeof window !== "undefined")
         window.removeEventListener("scroll", () => handleOnScroll());
     };
-  }, [ document.documentElement.scrollTop]);
-
-
+  }, [document.documentElement.scrollTop]);
 
   useEffect(() => {
-
     const getTweets = async () => {
       setPending(true);
 
-      const response = await fetch(`http://ferasjobeir.com/api/posts?page=${pageCounter}`, {
-        method: "get",
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `http://ferasjobeir.com/api/posts?page=${pageCounter}`,
+        {
+          method: "get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       const json = await response.json();
       if (json.success) console.log(json);
-      setTweets([...tweets , ...json.data.data]);
+      setTweets([...tweets, ...json.data.data]);
       setPending(false);
     };
     getTweets();
-    console.log(pageCounter );
-
+    console.log(pageCounter);
   }, [pageCounter]);
- 
 
   const love = async (tweet) => {
     const loved = await fetch(
@@ -138,7 +135,7 @@ const Post = () => {
         <Avatar
           className="avatarN"
           alt="Travis Howard"
-          src="https://www.gravatar.com/avatar/b9d07bf485929b7b39ed1d3d7b2d4f2c?s=200"
+          src={user?.avatar}
         />
         <div className="textarea">
           <textarea
@@ -208,6 +205,7 @@ const Post = () => {
           );
         })}
       </div>
+      {pending && <Loader />}
     </div>
   );
 };
