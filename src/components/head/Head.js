@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { AiFillHome, AiFillLock } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import "./Head.css"
@@ -23,19 +23,23 @@ const Header = (props) => {
       icon: <AiFillLock />,
     },
   ];
+
+  const herf = useLocation()
+
   return (
     <div className="head" style={{
-      paddingLeft: "300px "
+      paddingLeft: 0
 
     }}>
-         
-        <div>
+        <div style={{
+          margin: "0 7px"
+        }}>
             
-               {matchPath === Home? <h2>home</h2> : <h2>profile</h2> }
+               <h2>{!herf.pathname.replace(`/`, "" ) ? "Home" : herf.pathname.replace(`/`, " " ) } </h2>
             
-            
+             
         </div>
-      <div>
+      <div className="icoun">
         {menuItem.map((item, index) => (
           <NavLink to={item.path} key={index} className="link">
              {item.icon} </NavLink>

@@ -9,7 +9,7 @@ const RequiredAuth = () => {
        token = localStorage.getItem("token") || null;
       }, [location.pathname]);
 
-    return token ? (<Outlet/>) : <Navigate to={"/SingUp"} state-={{from:location}} replace />
+    return token ? (<Outlet/>) : <Navigate to={"/"} state-={{from:location}} replace />
 }
 
 export default RequiredAuth;

@@ -9,22 +9,21 @@ import SingIn from "./pages/signIn/SingIn";
 import SingOut from "./pages/signOut/SingOut";
 import SingUp from "./pages/signUp/SingUp";
 import RequiredAuth from "./RequiredAuth";
+import { AuthContext } from "./context/AtuthContext";
+import { useContext } from "react";
 
 function App() {
+const {token} = useContext(AuthContext);
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<RequiredAuth />}>
-          <Route path="/" element={<Home />} />
+       <Route path={"/"} element={token ? <Home/> : <SingUp/> }  /> 
           <Route path="/bookmarks" element={<BookMarks />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/lists" element={<Lists />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/singout" element={<SingOut />} />
-        </Route>
-
         <Route path="/singin" element={<SingIn />} />
-        <Route path="/singup" element={<SingUp />} />
       </Routes>
     </BrowserRouter>
   );
