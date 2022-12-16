@@ -5,21 +5,22 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 import { TfiComment } from "react-icons/tfi";
 import * as dayjs from "dayjs";
-import Comments from "./comint"
+import Comments from "./comint";
+import { json } from "react-router-dom";
 
 const Post = () => {
   let relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
   const { token } = useContext(AuthContext);
-  const [tweets, setTweets] = useState(null);
-  
-const [openComment, setOpenComment] = useState({
-  id:0,
-  open: false
-})
+  const [tweets, setTweets] = useState([]);
+  const [pageCounter, setPageCounter] = useState(1);
+  const [pending, setPending] = useState(false);
+  const [openComment, setOpenComment] = useState({
+    id: 0,
+    open: false,
+  });
   // ///////////
   const newTwt = useRef();
-  console.log(token);
 
   const newTweets = async () => {
     const res = await fetch(`http://ferasjobeir.com/api/posts`, {
@@ -40,6 +41,7 @@ const [openComment, setOpenComment] = useState({
       const Ndata = [json.data, ...tweets];
       newTwt.current.value = " ";
       setTweets(Ndata);
+      console.log(Ndata);
     } else {
       console.log(json);
       alert(json.messages);
@@ -48,21 +50,55 @@ const [openComment, setOpenComment] = useState({
   };
 
   // ////////////////////
+  const handleOnScroll = () => {
+    let userScrollH = 
+  document.documentElement.scrollTop 
+    
+    console.log(userScrollH, 'userScrollH');
+
+    let windowBottomHeight = document.documentElement.offsetHeight;
+    console.log(pageCounter);
+
+    console.log(windowBottomHeight, 'windowBottomHeight');
+
+    if (userScrollH / 1.6 >= windowBottomHeight * pageCounter ) {
+      console.log('if firde', 11111);
+      
+      setPageCounter(pageCounter + 1);
+    }
+  }
+
   useEffect(() => {
+    window.addEventListener("scroll", () => handleOnScroll());
+    return () => {
+      if (typeof window !== "undefined")
+        window.removeEventListener("scroll", () => handleOnScroll());
+    };
+  }, [ document.documentElement.scrollTop]);
+
+
+
+  useEffect(() => {
+
     const getTweets = async () => {
-      const response = await fetch(`http://ferasjobeir.com/api/posts?page=1`, {
+      setPending(true);
+
+      const response = await fetch(`http://ferasjobeir.com/api/posts?page=${pageCounter}`, {
         method: "get",
         headers: {
           Authorization: `Bearer ${token}`,
-        },
+        }
       });
       const json = await response.json();
       if (json.success) console.log(json);
-      setTweets(json.data.data);
+      setTweets([...tweets , ...json.data.data]);
+      setPending(false);
     };
     getTweets();
-    console.log(tweets);
-  }, []);
+    console.log(pageCounter );
+
+  }, [pageCounter]);
+ 
 
   const love = async (tweet) => {
     const loved = await fetch(
@@ -89,12 +125,12 @@ const [openComment, setOpenComment] = useState({
     }
   };
 
-  const opComment = (id)=>{
+  const opComment = (id) => {
     setOpenComment({
       id,
-      open: !openComment.open
-    })
-  }
+      open: !openComment.open,
+    });
+  };
 
   return (
     <div>
@@ -125,7 +161,7 @@ const [openComment, setOpenComment] = useState({
       <div className="Bpost">
         {tweets?.map((tweet, i) => {
           return (
-            <div >
+            <div>
               <div className="Spost" key={i}>
                 <div className="avatarN">
                   <Avatar src={tweet?.user?.avatar} />
@@ -138,25 +174,32 @@ const [openComment, setOpenComment] = useState({
                   <div>{tweet?.content}</div>
                   <div>
                     <div className="LCicouns">
-                      <div className="likComent"> 
-                      <div className="Licouns" onClick={() => love(tweet)}>
-                        {tweet.liked_by_current_user ? (
-                          <FcLike />
-                        ) : (
-                          <FcLikePlaceholder />
-                        )}
+                      <div className="likComent">
+                        <div className="Licouns" onClick={() => love(tweet)}>
+                          {tweet.liked_by_current_user ? (
+                            <FcLike />
+                          ) : (
+                            <FcLikePlaceholder />
+                          )}
 
-                        <label style={{ margin: "0 0 0 7px" }}>
-                          {tweet?.likes_count}
-                        </label>
+                          <label style={{ margin: "0 0 0 7px" }}>
+                            {tweet?.likes_count}
+                          </label>
+                        </div>
+                        <div
+                          className="Licouns"
+                          onClick={() => opComment(tweet.id)}
+                        >
+                          <TfiComment style={{ margin: "7px" }} />
+                          {tweet?.comments_count}
+                        </div>
                       </div>
-                      <div className="Licouns" onClick={() => opComment(tweet.id)}>
-                        <TfiComment style={{ margin: "7px" }}  />
-                        {tweet?.comments_count}
+
+                      <div>
+                        {tweet.id == openComment.id && openComment.open && (
+                          <Comments tweet={tweet} />
+                        )}
                       </div>
-                         </div>
-                      
-                      <div>{tweet.id == openComment.id &&  openComment.open &&  < Comments  tweet={tweet}/>}</div>
                     </div>
                   </div>
                 </div>
@@ -169,4 +212,3 @@ const [openComment, setOpenComment] = useState({
   );
 };
 export default Post;
-  

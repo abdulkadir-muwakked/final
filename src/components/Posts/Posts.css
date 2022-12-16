@@ -1,3 +1,6 @@
+body{
+  height: 110vh;
+}
 .new {
   border-bottom: 6px solid #f3f4f5;
   margin-top: 15px;
