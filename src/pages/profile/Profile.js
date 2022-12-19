@@ -24,12 +24,16 @@ const Profile = () => {
     });
     const json = await res.json();
     setUserData(json.data);
+    setPost(json.data.posts)
   };
   useEffect(() => {
     getMyProfile();
   }, []);
 
   // ////////
+  useEffect (()=>{
+setPost(post)
+  }, [post])
   const deletPost = async (pos) => {
     const ress = await fetch(`http://ferasjobeir.com/api/posts/${pos}`, {
       method: "delete",
@@ -39,12 +43,12 @@ const Profile = () => {
 
     });
     const deletNewPost = await ress.json();
-    setPos(...getMyProfile);
+    console.log(pos);
     if(deletNewPost.success){
-      const newtwet = [...post]
-      const index = newtwet.findIndex(item => item.id == deletNewPost.data.id)
-      newtwet[index] = deletNewPost.data
-      setPos([...pos ,...newtwet])
+      // const newtwet = [...post]
+      // const index = newtwet.findIndex(item => item.id == deletNewPost.data.id)
+      // newtwet[index] = deletNewPost.data
+      setPost(post.filter((i)=> i.id != pos))
   }
   };
   // ///
@@ -64,22 +68,28 @@ const Profile = () => {
     });
     const json = await response.json();
     console.log(json);
+    if(json.success){
+      setUserData(json.data)
+    }
+
   };
 
   return (
     <Layout>
       <>
         <div className="Information">My Information</div>
+       
+
+        <form onSubmit={updateProfile} method="put" className="profilForm">
         <input
           id="image"
           type="file"
+          name="avatar"
           ref={fileRef}
           style={{
             display: `none`,
           }}
         />
-
-        <form onSubmit={updateProfile} method="put" className="profilForm">
           <div className="person-avatar">
             <AiOutlineCamera
               className="icon"
@@ -179,7 +189,7 @@ const Profile = () => {
         </form>
         <div className="Information">My Posts</div>
         <div className="post">
-          {userData?.posts.map((post) => (
+          {post?.map((post) => (
             <div className="getPost">
               {post.content}
               <button

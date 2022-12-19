@@ -7,6 +7,7 @@ import { TfiComment } from "react-icons/tfi";
 import * as dayjs from "dayjs";
 import Comments from "./comint";
 import Loader from "../loader/Loader";
+import { MdLastPage } from "react-icons/md";
 
 const Post = () => {
   let relativeTime = require("dayjs/plugin/relativeTime");
@@ -19,6 +20,7 @@ const Post = () => {
     id: 0,
     open: false,
   });
+  const [lastPage, setLastPage] = useState (2)
   // ///////////
   const newTwt = useRef();
 
@@ -60,7 +62,7 @@ const Post = () => {
 
     console.log(windowBottomHeight, "windowBottomHeight");
 
-    if (userScrollH / 1.6 >= windowBottomHeight * pageCounter) {
+    if (userScrollH / 1.6 >= windowBottomHeight * pageCounter && lastPage>pageCounter) {
       console.log("if firde", 11111);
 
       setPageCounter(pageCounter + 1);
@@ -92,6 +94,8 @@ const Post = () => {
       if (json.success) console.log(json);
       setTweets([...tweets, ...json.data.data]);
       setPending(false);
+setLastPage(json.data.last_page)
+console.log(lastPage);
     };
     getTweets();
     console.log(pageCounter);
@@ -124,7 +128,7 @@ const Post = () => {
 
   const opComment = (id) => {
     setOpenComment({
-      id,
+      id, 
       open: !openComment.open,
     });
   };
